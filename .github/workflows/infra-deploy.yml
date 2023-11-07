@@ -1,12 +1,12 @@
-name: 'Deply Infra'
+name: 'Deploy Infra'
 
 env:
     TF_VAR_aws_region: ${{ vars.AWS_REGION }}
-
+    
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
   deploy-infra:
@@ -47,3 +47,4 @@ jobs:
       - run: echo ${{ steps.plan.outputs.stdout }}
       - run: echo ${{ steps.plan.outputs.stderr }}
       - run: echo ${{ steps.plan.outputs.exitcode }}
+        
