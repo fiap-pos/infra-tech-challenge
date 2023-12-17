@@ -1,7 +1,8 @@
+#Configure backend
 terraform {
   backend "s3" {
-    bucket = "tech-challenge-61"
-    key    = "infra-db-tech-challenge/rds.tfstate"
+    bucket = "vwnunes-tech-challenge-61"
+    key    = "infra-challenge/challenge.tfstate"
     region = "us-east-1"
   }
 }
