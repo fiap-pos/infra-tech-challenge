@@ -1,4 +1,4 @@
-name: 'Deploy Infra'
+name: 'Deploy infra'
 
 env:
     TF_VAR_aws_region: ${{ vars.AWS_REGION }}
