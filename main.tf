@@ -7,6 +7,7 @@ module "mongodb" {
   atlas_region = var.atlas_region
   environment = var.environment
   auth_application_tag_name = var.auth_application_tag_name 
+  producao_application_tag_name = var.producao_application_tag_name
   default_tag = var.default_tag
 }
 
@@ -15,4 +16,9 @@ module "rds" {
   aws_region = var.aws_region
   environment = var.environment
   lanchonete_application_tag_name = var.lanchonete_application_tag_name
+}
+
+module "sqs" {
+  source = "./modules/sqs"
+  producao_application_tag_name = var.producao_application_tag_name
 }

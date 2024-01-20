@@ -9,10 +9,17 @@ variable "atlas_project_name" {
   description = "Atlas project name"
 }
 
-# Application Tag name
+# Auth application tag name
 variable "auth_application_tag_name" {
   type        = string
-  description = "Application tag name"
+  description = "Auth application tag name"
+}
+
+# Producao application tag name
+variable "producao_application_tag_name" {
+  type        = string
+  description = "Producao application tag name"
+  
 }
 
 # Atlas Project Environment

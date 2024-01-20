@@ -20,3 +20,8 @@ output "lanchonete_user_password" {
   sensitive = true
   value = module.rds.lanchonete_user_password 
 }
+
+# SQS outputs
+output "producao_queue_url" { value = module.sqs.producao_queue_url }
+output "producao_queue_dlq_url" { value = module.sqs.producao_queue_dlq_url }
+

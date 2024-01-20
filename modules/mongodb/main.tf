@@ -5,6 +5,9 @@ locals {
 
   auth_database_name = "techchallengeauth"
   auth_database_username = "techchallengeauth"
+
+  producao_database_name = "techchallengeproducao"
+  producao_database_username = "techchallengeproducao"
 }
 
 # Create a Project
@@ -25,8 +28,26 @@ resource "mongodbatlas_database_user" "auth-db-user" {
   }
 }
 
+# Create Producao Database User
+resource "mongodbatlas_database_user" "producao-db-user" {
+  username = local.producao_database_username
+  password = random_password.producao-db-user-password.result
+  project_id = mongodbatlas_project.atlas-project.id
+  auth_database_name = "admin"
+  roles {
+    role_name     = "readWrite"
+    database_name = local.producao_database_name
+  }
+}
+
 # Create Auth Database Password
 resource "random_password" "auth-db-user-password" {
+  length = 16
+  special = false
+}
+
+# Create Producao Database Password 
+resource "random_password" "producao-db-user-password" {
   length = 16
   special = false
 }
@@ -78,7 +99,7 @@ resource "aws_ssm_parameter" "auth_mongodb_database_url" {
 }
 
 # Stores variables into AWS ssm
-resource "aws_ssm_parameter" "auth_mongodb_username" {
+resource "aws_ssm_parameter" "auth_mongodb_database_name" {
   name        = "/${var.auth_application_tag_name}/${var.environment}/MONGODB_DATABASE"
   description = "Database name"
   type        = "String"
@@ -92,4 +113,26 @@ resource "aws_ssm_parameter" "auth_secret" {
   description = "Auth secret"
   type        = "SecureString"
   value       = uuid()
+}
+
+# Stores variables into AWS ssm
+resource "aws_ssm_parameter" "producao_mongodb_database_url" {
+  name        = "/${var.producao_application_tag_name}/${var.environment}/MONGODB_URI"
+  description = "Producao Mongo DB Password"
+  type        = "SecureString"
+  value       = "mongodb+srv://${local.producao_database_username}:${mongodbatlas_database_user.producao-db-user.password }@${replace(mongodbatlas_advanced_cluster.atlas-cluster.connection_strings.0.standard_srv, "mongodb+srv://", "")}"
+
+  depends_on = [ 
+    random_password.producao-db-user-password,
+    mongodbatlas_advanced_cluster.atlas-cluster
+  ]
+}
+
+# Stores variables into AWS ssm
+resource "aws_ssm_parameter" "producao_mongodb_database_name" {
+  name        = "/${var.producao_application_tag_name}/${var.environment}/MONGODB_DATABASE"
+  description = "Database name"
+  type        = "String"
+  value       = local.producao_database_name
+  depends_on = [ random_password.producao-db-user-password ]
 }
