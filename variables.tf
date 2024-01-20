@@ -1,18 +1,58 @@
-# Application Tag Name 
-variable "application_tag_name" {
-  type        = string
-  description = "Application Tag Name"
-  default = "lanchonete_db"
-}
-
+# ---- AWS Variables ----
 variable "aws_region" {
   type = string
   description = "AWS Region"
   default = "us-east-1"
 }
 
+# ---- Atlas Variables ----
+
+# Atlas Organization ID 
+variable "atlas_org_id" {
+  type        = string
+  description = "Atlas Organization ID"
+}
+# Atlas Project Name
+variable "atlas_project_name" {
+  type        = string
+  description = "Atlas project name"
+  default     = "Fiap Tech Challenge"
+}
+
+# Atlas Region
+variable "atlas_region" {
+  type        = string
+  description = "Atlas region where resources will be created"
+  default     = "US_EAST_1"
+}
+
+# ---- Common variables ----
 variable "environment" {
   type = string
   description = "environment"
   default = "dev"
+}
+
+variable "default_tag" {
+  type = string
+  description = "default tag"
+  default = "tech-challenge"
+}
+
+# ---- Lanchonete Application Variables ----
+
+# Application Tag Name 
+variable "lanchonete_application_tag_name" {
+  type        = string
+  description = "Application Tag Name"
+  default = "tech-challenge-lanchonete"
+}
+
+# ---- Auth Application Variables ----  
+
+# Application Tag name
+variable "auth_application_tag_name" {
+  type        = string
+  description = "Application tag name"
+  default     = "tech-challenge-auth"
 }

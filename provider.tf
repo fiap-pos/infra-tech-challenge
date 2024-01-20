@@ -1,5 +1,8 @@
 terraform {
   required_providers {
+    mongodbatlas = {
+      source = "mongodb/mongodbatlas"
+    }
     aws = {
       source = "hashicorp/aws"
     }
@@ -11,8 +14,18 @@ provider "aws" {
   region = var.aws_region
   default_tags {
     tags = {
-      application = var.application_tag_name
+      environment = var.environment
+      application = var.default_tag
     }
+  }
+}
+
+#Configure backend
+terraform {
+  backend "s3" {
+    bucket = "vwnunes-tech-challenge-61"
+    key    = "infra-challenge/challenge.tfstate"
+    region = "us-east-1"
   }
 }
   
