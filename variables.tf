@@ -44,7 +44,7 @@ variable "default_tag" {
 # Application Tag Name 
 variable "lanchonete_application_tag_name" {
   type        = string
-  description = "Application Tag Name"
+  description = "Lanchonete application tag Name"
   default = "tech-challenge-lanchonete"
 }
 
@@ -53,6 +53,15 @@ variable "lanchonete_application_tag_name" {
 # Application Tag name
 variable "auth_application_tag_name" {
   type        = string
-  description = "Application tag name"
+  description = "Auth application tag name"
   default     = "tech-challenge-auth"
+}
+
+
+# ---- Producao Application Variables ----
+variable "producao_application_tag_name" {
+  type        = string
+  description = "Produção application tag name"
+  default     = "tech-challenge-producao"
+  
 }
