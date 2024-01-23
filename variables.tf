@@ -57,11 +57,17 @@ variable "auth_application_tag_name" {
   default     = "tech-challenge-auth"
 }
 
-
 # ---- Producao Application Variables ----
 variable "producao_application_tag_name" {
   type        = string
   description = "Produção application tag name"
   default     = "tech-challenge-producao"
   
+}
+
+# ---- Pagamentos Application Variables ----
+variable "pagamentos_application_tag_name" {
+  type        = string
+  description = "Pagamentos application tag name"
+  default     = "tech-challenge-pagamentos"
 }
