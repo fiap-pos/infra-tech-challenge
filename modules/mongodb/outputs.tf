@@ -8,3 +8,10 @@ output "auth_user_password" {
   sensitive = true
   value = mongodbatlas_database_user.auth-db-user.password 
 }
+
+output "producao_database_name" { value = local.producao_database_name }
+output "producao_username" { value = mongodbatlas_database_user.producao-db-user.username }
+output "producao_user_password" { 
+  sensitive = true
+  value = mongodbatlas_database_user.producao-db-user.password
+}
