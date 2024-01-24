@@ -9,7 +9,7 @@ locals {
 
   mysql_version = "5.7.44"
   mysql_instance_class = "db.t3.micro"
-  
+
   postgres_version = "16.1"
   postgres_instance_class = "db.t3.micro"
 }
@@ -21,6 +21,12 @@ resource "aws_security_group" "rds_sg" {
   ingress {
     from_port       = 3306
     to_port         = 3306
+    protocol        = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
     protocol        = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
