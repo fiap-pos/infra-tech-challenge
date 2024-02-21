@@ -1,6 +1,7 @@
 locals {
   producao_queue_name = "fila-producao"
   pagamentos_queue_name = "pagamentos"
+  pedidos_queue_name = "pedido-criado"
 }
 
 
@@ -61,5 +62,35 @@ resource "aws_sqs_queue_redrive_allow_policy" "pagamentos-queue-redrive-policy" 
   redrive_allow_policy = jsonencode({
     redrivePermission = "byQueue",
     sourceQueueArns   = [aws_sqs_queue.pagamentos-dlq-queue.arn]
+  })
+}
+
+# ---- Pedidos Queue ----
+
+# Create Pedidos SQS dlq Queue
+resource "aws_sqs_queue" "pedidos-dlq-queue" {
+  name = "${local.pedidos_queue_name}-dlq"
+  tags = {
+    Name = "${local.pedidos_queue_name}-dlq"
+    application = var.lanchonete_application_tag_name
+  }
+}
+
+# Create Pedidos SQS Queue
+resource "aws_sqs_queue" "pedidos-queue" {
+  name = local.pedidos_queue_name
+  tags = {
+    Name = local.pedidos_queue_name
+    application = var.lanchonete_application_tag_name
+  }
+}
+
+# Create Redrive Pedidos Queue policy
+resource "aws_sqs_queue_redrive_allow_policy" "pedidos-queue-redrive-policy" {
+  queue_url = aws_sqs_queue.pedidos-queue.id
+
+  redrive_allow_policy = jsonencode({
+    redrivePermission = "byQueue",
+    sourceQueueArns   = [aws_sqs_queue.pedidos-dlq-queue.arn]
   })
 }
