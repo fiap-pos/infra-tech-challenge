@@ -23,4 +23,5 @@ module "sqs" {
   source = "./modules/sqs"
   producao_application_tag_name = var.producao_application_tag_name
   pagamentos_application_tag_name = var.pagamentos_application_tag_name
+  lanchonete_application_tag_name = var.lanchonete_application_tag_name
 }

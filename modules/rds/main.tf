@@ -3,10 +3,15 @@
 locals {
   lanchonete_username = "lanchonete"
   lanchonete_database_name = "lanchonetedb"
+
   pagamentos_username = "pagamentos"
   pagamentos_database_name = "pagamentosdb"
+
   mysql_version = "5.7.44"
   mysql_instance_class = "db.t3.micro"
+
+  postgres_version = "16.1"
+  postgres_instance_class = "db.t3.micro"
 }
 
 
@@ -16,6 +21,12 @@ resource "aws_security_group" "rds_sg" {
   ingress {
     from_port       = 3306
     to_port         = 3306
+    protocol        = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
     protocol        = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -55,7 +66,7 @@ resource "aws_db_instance" "lanchonete_db_rds" {
 }
 
 # Stores Lanchonete variables into AWS ssm
-resource "aws_ssm_parameter" "lanchonete_mysql_rds_host" {
+resource "aws_ssm_parameter" "lanchonete_rds_host" {
   name        = "/${var.lanchonete_application_tag_name}/${var.environment}/DB_HOST"
   description = "Database Host"
   type        = "String"
@@ -63,7 +74,7 @@ resource "aws_ssm_parameter" "lanchonete_mysql_rds_host" {
   depends_on = [ aws_db_instance.lanchonete_db_rds ]
 }
 
-resource "aws_ssm_parameter" "lanchonete_mysql_rds_username" {
+resource "aws_ssm_parameter" "lanchonete_rds_username" {
   name        = "/${var.lanchonete_application_tag_name}/${var.environment}/DB_USERNAME"
   description = "Database Username"
   type        = "String"
@@ -71,7 +82,7 @@ resource "aws_ssm_parameter" "lanchonete_mysql_rds_username" {
   depends_on = [ aws_db_instance.lanchonete_db_rds ]
 }
 
-resource "aws_ssm_parameter" "lanchonete_mysql_rds_password" {
+resource "aws_ssm_parameter" "lanchonete_rds_password" {
   name        = "/${var.lanchonete_application_tag_name}/${var.environment}/DB_PASSWORD"
   description = "Database Password"
   type        = "SecureString"
@@ -91,10 +102,10 @@ resource "random_password" "pagamentos-db-user-password" {
 
 # Create Pagamentos RDS Database Instance
 resource "aws_db_instance" "pagamentos_db_rds" {
-    engine = "mysql"
-    engine_version = local.mysql_version
+    engine = "postgres"
+    engine_version = local.postgres_version
     allocated_storage = 10
-    instance_class = local.mysql_instance_class
+    instance_class = local.postgres_instance_class
     storage_type = "gp2"
     identifier = local.pagamentos_database_name
     db_name = local.pagamentos_database_name
@@ -108,7 +119,7 @@ resource "aws_db_instance" "pagamentos_db_rds" {
 
 # Stores Pagamentos variables into AWS ssm
 
-resource "aws_ssm_parameter" "pagamentos_mysql_rds_host" {
+resource "aws_ssm_parameter" "pagamentos_rds_host" {
   name        = "/${var.pagamentos_application_tag_name}/${var.environment}/DB_HOST"
   description = "Database Host"
   type        = "String"
@@ -116,7 +127,7 @@ resource "aws_ssm_parameter" "pagamentos_mysql_rds_host" {
   depends_on = [ aws_db_instance.pagamentos_db_rds ]
 }
 
-resource "aws_ssm_parameter" "pagamentos_mysql_rds_username" {
+resource "aws_ssm_parameter" "pagamentos_rds_username" {
   name        = "/${var.pagamentos_application_tag_name}/${var.environment}/DB_USERNAME"
   description = "Database Username"
   type        = "String"
@@ -124,7 +135,7 @@ resource "aws_ssm_parameter" "pagamentos_mysql_rds_username" {
   depends_on = [ aws_db_instance.pagamentos_db_rds ]
 }
 
-resource "aws_ssm_parameter" "pagamentos_mysql_rds_password" {
+resource "aws_ssm_parameter" "pagamentos_rds_password" {
   name        = "/${var.pagamentos_application_tag_name}/${var.environment}/DB_PASSWORD"
   description = "Database Password"
   type        = "SecureString"
